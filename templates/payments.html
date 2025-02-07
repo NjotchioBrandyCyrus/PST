@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payments - Savings Goal Tracker</title>
+ 
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="image/e-paymen.ico">
+  <style>
+    body {
+      background-color: whitesmoke;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #00698f;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 35px;
+      color: white;
+    }
+    .nav-btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+    .nav-btn:hover {
+      background-color: #45a049;
+    }
+    .container {
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    /* Payment Form Styling */
+    .payment-form {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .payment-form h2 {
+      font-size: 24px;
+      font-weight: bold;
+      color: #00698f;
+      margin-bottom: 10px;
+    }
+    .payment-form input, 
+    .payment-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0 15px 0;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .payment-form button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    .payment-form button:hover {
+      background-color: #45a049;
+    }
+    /* Payment Card Styling */
+    .payment-card {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .payment-card h2 {
+      font-size: 24px;
+      font-weight: bold;
+      color: #00698f;
+      margin-bottom: 10px;
+    }
+    .payment-card p {
+      font-size: 16px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>Payments</div>
+    <!-- Dashboard button -->
+    <a href="/dashboard" class="nav-btn">Dashboard</a>
+  </header>
+  <div class="container">
+    <!-- Payment Form -->
+    <div class="payment-form">
+      <h2>Add New Payment</h2>
+      <input type="text" id="payment-title" placeholder="Payment Title">
+      <input type="number" id="payment-amount" placeholder="Amount">
+      <input type="date" id="payment-date">
+      <textarea id="payment-desc" rows="3" placeholder="Description (optional)"></textarea>
+      <button onclick="savePayment()">Save Payment</button>
+    </div>
+    
+    <!-- Payments Display -->
+    <div id="payment-container">
+      <!-- Payment cards will be dynamically inserted here -->
+    </div>
+  </div>
+
+  <script>
+    // Retrieve payments from localStorage
+    function getPayments() {
+      const payments = localStorage.getItem('payments');
+      return payments ? JSON.parse(payments) : [];
+    }
+
+    // Save a new payment and update the display
+    function savePayment() {
+      const title = document.getElementById('payment-title').value.trim();
+      const amount = document.getElementById('payment-amount').value.trim();
+      const date = document.getElementById('payment-date').value;
+      const description = document.getElementById('payment-desc').value.trim();
+
+      if (!title || !amount || !date) {
+        alert('Please fill in the title, amount, and date.');
+        return;
+      }
+
+      let payments = getPayments();
+      payments.push({ title, amount, date, description });
+      localStorage.setItem('payments', JSON.stringify(payments));
+
+      // Clear form fields
+      document.getElementById('payment-title').value = '';
+      document.getElementById('payment-amount').value = '';
+      document.getElementById('payment-date').value = '';
+      document.getElementById('payment-desc').value = '';
+
+      renderPayments();
+    }
+
+    // Render payment cards
+    function renderPayments() {
+      const payments = getPayments();
+      const container = document.getElementById('payment-container');
+      container.innerHTML = '';
+
+      payments.forEach(payment => {
+        const card = document.createElement('div');
+        card.className = 'payment-card';
+        card.innerHTML = `<h2>${payment.title}</h2>
+                          <p><strong>Amount:</strong> $${payment.amount}</p>
+                          <p><strong>Date:</strong> ${payment.date}</p>
+                          <p>${payment.description}</p>`;
+        container.appendChild(card);
+      });
+    }
+
+    // Render payments on page load
+    document.addEventListener('DOMContentLoaded', renderPayments);
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const theme = localStorage.getItem('theme') || 'light';
+      const fontSize = localStorage.getItem('fontSize') || 'medium';
+  
+      applyTheme(theme);
+      applyFontSize(fontSize);
+    });
+  
+    function applyTheme(theme) {
+      const customBgColor = localStorage.getItem('customBgColor');
+      const customTextColor = localStorage.getItem('customTextColor');
+  
+      if (theme === 'custom' && customBgColor && customTextColor) {
+        document.body.style.backgroundColor = customBgColor;
+        document.body.style.color = customTextColor;
+      } else if (theme === 'light') {
+        document.body.style.backgroundColor = '#ffffff';
+        document.body.style.color = '#000000';
+      } else if (theme === 'dark') {
+        document.body.style.backgroundColor = '#000000';
+        document.body.style.color = '#ffffff';
+      } else if (theme === 'blue') {
+        document.body.style.backgroundColor = '#e0f7fa';
+        document.body.style.color = '#004d40';
+      }
+    }
+  
+    function applyFontSize(fontSize) {
+      if (fontSize === 'small') {
+        document.body.style.fontSize = '12px';
+      } else if (fontSize === 'medium') {
+        document.body.style.fontSize = '16px';
+      } else if (fontSize === 'large') {
+        document.body.style.fontSize = '20px';
+      }
+    }
+  </script>
+  
+</body>
+</html>

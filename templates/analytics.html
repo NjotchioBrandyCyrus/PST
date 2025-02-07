@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics - Savings Goal Tracker</title>
+  <link rel="icon" type="image/x-icon" href="image/analytic.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: whitesmoke;
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+    header {
+      background-color: #00698f;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 35px;
+      color: white;
+    }
+    .nav-btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+    .nav-btn:hover {
+      background-color: #45a049;
+    }
+    .container {
+      padding: 20px;
+    }
+    .chart-container {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .chart-container h2 {
+      font-size: 24px;
+      font-weight: bold;
+      color: #00698f;
+      margin-bottom: 10px;
+    }
+    .form-container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>Analytics</div>
+    <a href="/dashboard" class="nav-btn">Dashboard</a>
+  </header>
+  <div class="container">
+    <div class="form-container">
+      <h2>Create a New Goal</h2>
+      <input type="text" id="goal" placeholder="Goal Description" class="mb-4 p-2 w-full border rounded" />
+      <input type="number" id="target" placeholder="Target Amount" class="mb-4 p-2 w-full border rounded" />
+      <button onclick="saveGoal()" class="bg-blue-500 text-white px-4 py-2 rounded">Save Goal</button>
+    </div>
+
+    <div class="form-container">
+      <h2>Update Progress</h2>
+      <select id="goal-select" class="mb-4 p-2 w-full border rounded">
+        <option value="Select Goal">Select Goal</option>
+      </select>
+      <input type="number" id="progress" placeholder="Amount Saved" class="mb-4 p-2 w-full border rounded" />
+      <button onclick="updateProgress()" class="bg-orange-500 text-white px-4 py-2 rounded">Update Progress</button>
+    </div>
+
+    <div class="chart-container">
+      <h2>Savings Progress Chart</h2>
+      <canvas id="analyticsChart"></canvas>
+    </div>
+    
+    <div class="chart-container">
+      <h2>Goal Table</h2>
+      <table class="w-full table-auto border">
+        <thead>
+          <tr>
+            <th class="border p-2">Goal Description</th>
+            <th class="border p-2">Target Amount</th>
+            <th class="border p-2">Amount Saved</th>
+            <th class="border p-2">Remaining</th>
+            <th class="border p-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="goal-table-body">
+          <!-- Goal rows will appear here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    // Initialize empty goal data
+    let goals = [];
+
+    const ctx = document.getElementById('analyticsChart').getContext('2d');
+    const analyticsChart = new Chart(ctx, {
+      type: 'bar',  // Change the chart type to 'bar' for target/saved/remaining
+      data: {
+        labels: [], // This will hold the goal names
+        datasets: [
+          {
+            label: 'Target Amount',
+            data: [], // This will hold the target amounts
+            borderColor: '#FF6347',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderWidth: 1
+          },
+          {
+            label: 'Amount Saved',
+            data: [], // This will hold the saved amounts
+            borderColor: '#4CAF50',
+            backgroundColor: 'rgba(76, 175, 80, 0.2)',
+            borderWidth: 1
+          },
+          {
+            label: 'Remaining',
+            data: [], // This will hold the remaining amounts
+            borderColor: '#00BCD4',
+            backgroundColor: 'rgba(0, 188, 212, 0.2)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    function saveGoal() {
+      const goalDescription = document.getElementById('goal').value;
+      const targetAmount = parseFloat(document.getElementById('target').value);
+
+      if (goalDescription && !isNaN(targetAmount)) {
+        const goal = {
+          description: goalDescription,
+          targetAmount: targetAmount,
+          amountSaved: 0
+        };
+        goals.push(goal);
+
+        // Update the analytics chart when a goal is added
+        updateAnalyticsChart();
+
+        // Add goal to the goal select dropdown
+        const goalSelect = document.getElementById('goal-select');
+        const option = document.createElement('option');
+        option.textContent = goalDescription;
+        goalSelect.appendChild(option);
+
+        updateGoalTable();
+
+        // Clear input fields
+        document.getElementById('goal').value = '';
+        document.getElementById('target').value = '';
+      } else {
+        alert('Please enter a valid goal description and target amount.');
+      }
+    }
+
+    function updateProgress() {
+      const goalSelect = document.getElementById('goal-select');
+      const selectedGoalDescription = goalSelect.value;
+      const progressAmount = parseFloat(document.getElementById('progress').value);
+
+      if (selectedGoalDescription !== 'Select Goal' && !isNaN(progressAmount)) {
+        const goal = goals.find(g => g.description === selectedGoalDescription);
+        goal.amountSaved += progressAmount;
+
+        // Update the analytics chart when progress is updated
+        updateAnalyticsChart();
+
+        updateGoalTable();
+      } else {
+        alert('Please select a goal and enter a valid progress amount.');
+      }
+    }
+
+    function updateAnalyticsChart() {
+      // Clear existing chart data
+      analyticsChart.data.labels = [];
+      analyticsChart.data.datasets[0].data = [];
+      analyticsChart.data.datasets[1].data = [];
+      analyticsChart.data.datasets[2].data = [];
+
+      goals.forEach(goal => {
+        analyticsChart.data.labels.push(goal.description);
+        analyticsChart.data.datasets[0].data.push(goal.targetAmount);
+        analyticsChart.data.datasets[1].data.push(goal.amountSaved);
+        analyticsChart.data.datasets[2].data.push(goal.targetAmount - goal.amountSaved);
+      });
+
+      analyticsChart.update();
+    }
+
+    function updateGoalTable() {
+      const goalTableBody = document.getElementById('goal-table-body');
+      goalTableBody.innerHTML = '';
+
+      goals.forEach((goal, index) => {
+        const remaining = goal.targetAmount - goal.amountSaved;
+        const row = `
+          <tr>
+            <td class="border p-2">${goal.description}</td>
+            <td class="border p-2">$${goal.targetAmount.toFixed(2)}</td>
+            <td class="border p-2">$${goal.amountSaved.toFixed(2)}</td>
+            <td class="border p-2">$${remaining.toFixed(2)}</td>
+            <td class="border p-2">
+              <button class="bg-yellow-500 text-white px-2 py-1 rounded" onclick="editGoal(${index})">Edit</button>
+            </td>
+          </tr>
+        `;
+        goalTableBody.innerHTML += row;
+      });
+    }
+
+    function editGoal(index) {
+      const goal = goals[index];
+
+      const newDescription = prompt('Enter new goal description:', goal.description);
+      const newTargetAmount = parseFloat(prompt('Enter new target amount:', goal.targetAmount));
+
+      if (newDescription && !isNaN(newTargetAmount)) {
+        goal.description = newDescription;
+        goal.targetAmount = newTargetAmount;
+
+        // Update the analytics chart when a goal is updated
+        updateAnalyticsChart();
+
+        updateGoalTable();
+      } else {
+        alert('Please enter valid information.');
+      }
+    }
+  </script>
+</body>
+</html>

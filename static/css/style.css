@@ -1,0 +1,133 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Body Styling */
+body {
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Navigation Bar */
+nav {
+    background-color: #007bff;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Home Page */
+.home-container {
+    text-align: center;
+    padding: 50px;
+}
+
+.home-container h1 {
+    color: #007bff;
+}
+
+/* Dashboard */
+.dashboard-container {
+    padding: 20px;
+}
+
+.dashboard-container h2 {
+    color: #28a745;
+}
+
+/* Analytics */
+.analytics-container {
+    padding: 20px;
+}
+
+.analytics-container h2 {
+    color: #17a2b8;
+}
+
+/* Settings */
+.settings-container {
+    padding: 20px;
+    background-color: white;
+    max-width: 600px;
+    margin: auto;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Sign-in Page */
+.signin-container {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.signin-container input,
+.signin-container button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.signin-container button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.signin-container button:hover {
+    background-color: #0056b3;
+}
+
+/* Logout Page */
+.logout-container {
+    text-align: center;
+    padding: 50px;
+}
+
+/* Payments */
+.payments-container {
+    padding: 20px;
+    text-align: center;
+}
+
+.payments-container h2 {
+    color: #ffc107;
+}
+
+/* Projects */
+.projects-container {
+    padding: 20px;
+}
+
+.projects-container h2 {
+    color: #6f42c1;
+}
+
+/* Footer */
+footer {
+    margin-top: 20px;
+    text-align: center;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+}

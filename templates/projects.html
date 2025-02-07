@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects - Savings Goal Tracker</title>
+ 
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+  <link rel="icon" type="image/x-icon" href="image/MS_Project_Logo.ico">
+  <style>
+    body {
+      background-color: whitesmoke;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #00698f;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 35px;
+      color: white;
+    }
+    .nav-btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+    .nav-btn:hover {
+      background-color: #45a049;
+    }
+    .container {
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    /* Project Form Styling */
+    .project-form {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .project-form h2 {
+      font-size: 24px;
+      font-weight: bold;
+      color: #00698f;
+      margin-bottom: 10px;
+    }
+    .project-form input, .project-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0 15px 0;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .project-form button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    .project-form button:hover {
+      background-color: #45a049;
+    }
+    /* Project Card Styling */
+    .project-card {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .project-card h2 {
+      font-size: 24px;
+      font-weight: bold;
+      color: #00698f;
+      margin-bottom: 10px;
+    }
+    .project-card p {
+      font-size: 16px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>Projects</div>
+    <!-- Dashboard button to navigate back -->
+    <a href="/dashboard" class="nav-btn">Dashboard</a>
+  </header>
+  
+  <div class="container">
+    <!-- Project Form --> 
+    <div class="project-form">
+      <h2>Add New Project</h2>
+      <input type="text" id="project-name" placeholder="Project Name">
+      <textarea id="project-desc" rows="4" placeholder="Project Description"></textarea>
+      <button onclick="saveProject()">Save Project</button>
+    </div>
+    
+    <!-- Projects Display --> 
+    <div id="project-container">
+      <!-- Project cards will be dynamically inserted here --> 
+    </div>
+  </div>
+  
+  <script>
+    // Retrieve projects from localStorage or return an empty array if none exist.
+    function getProjects() {
+      const projects = localStorage.getItem('projects');
+      return projects ? JSON.parse(projects) : [];
+    }
+
+    // Save a new project and update the list.
+    function saveProject() {
+      const name = document.getElementById('project-name').value.trim();
+      const description = document.getElementById('project-desc').value.trim();
+      
+      if (!name || !description) {
+        alert('Please fill in both fields.');
+        return;
+      }
+      
+      let projects = getProjects();
+      projects.push({ name, description });
+      localStorage.setItem('projects', JSON.stringify(projects));
+      
+      // Clear form fields.
+      document.getElementById('project-name').value = '';
+      document.getElementById('project-desc').value = '';
+      
+      renderProjects();
+    }
+
+    // Render project cards in the container.
+    function renderProjects() {
+      const projects = getProjects();
+      const container = document.getElementById('project-container');
+      container.innerHTML = ''; // Clear existing content
+      
+      projects.forEach(project => {
+        const card = document.createElement('div');
+        card.className = 'project-card';
+        card.innerHTML = `<h2>${project.name}</h2><p>${project.description}</p>`;
+        container.appendChild(card);
+      });
+    }
+
+    // Render projects on page load.
+    document.addEventListener('DOMContentLoaded', renderProjects);
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const theme = localStorage.getItem('theme') || 'light';
+      const fontSize = localStorage.getItem('fontSize') || 'medium';
+  
+      applyTheme(theme);
+      applyFontSize(fontSize);
+    });
+  
+    function applyTheme(theme) {
+      const customBgColor = localStorage.getItem('customBgColor');
+      const customTextColor = localStorage.getItem('customTextColor');
+  
+      if (theme === 'custom' && customBgColor && customTextColor) {
+        document.body.style.backgroundColor = customBgColor;
+        document.body.style.color = customTextColor;
+      } else if (theme === 'light') {
+        document.body.style.backgroundColor = '#ffffff';
+        document.body.style.color = '#000000';
+      } else if (theme === 'dark') {
+        document.body.style.backgroundColor = '#000000';
+        document.body.style.color = '#ffffff';
+      } else if (theme === 'blue') {
+        document.body.style.backgroundColor = '#e0f7fa';
+        document.body.style.color = '#004d40';
+      }
+    }
+  
+    function applyFontSize(fontSize) {
+      if (fontSize === 'small') {
+        document.body.style.fontSize = '12px';
+      } else if (fontSize === 'medium') {
+        document.body.style.fontSize = '16px';
+      } else if (fontSize === 'large') {
+        document.body.style.fontSize = '20px';
+      }
+    }
+  </script>
+  
+</body>
+</html>

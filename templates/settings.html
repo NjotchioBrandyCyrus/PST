@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>settings</title>
+  <link rel="icon" type="image/x-icon" href="image/set.ico">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    #settings-panel {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 20px;
+      max-width: 100%;
+      margin: 50px auto; 
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    #settings-panel.show {
+      display: block;
+      opacity: 1;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      margin-bottom: 1%;
+    }
+
+    select, input[type="checkbox"], button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+
+    button {
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      padding: 8px 12px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+   
+    #toast {
+      visibility: hidden;
+      min-width: 250px;
+      margin-left: -125px;
+      background-color: #333;
+      color: white;
+      text-align: center;
+      border-radius: 5px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1;
+      left: 50%;
+      bottom: 30px;
+      font-size: 17px;
+      opacity: 0;
+      transition: opacity 0.5s, visibility 0.5s, bottom 0.5s;
+    }
+
+    #toast.show {
+      visibility: visible;
+      opacity: 1;
+      bottom: 50px;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <div>
+      <button>
+        <a href="dashboard" style="text-decoration: none; font-size: 18px; color: #f2f4f6;">Dashboard</a>
+      </button>
+      
+    </div>
+    <button onclick="toggleSettings()">Settings</button>
+    
+      <h2>Settings</h2>
+
+     
+      <label for="theme">Theme:</label>
+      <select id="theme" onchange="previewTheme()">
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+        <option value="blue">Blue</option>
+        <option value="custom">Custom</option>
+      </select>
+
+      
+      <label for="font-size">Font Size:</label>
+      <select id="font-size" onchange="previewFontSize()">
+        <option value="small">Small</option>
+        <option value="medium" selected>Medium</option>
+        <option value="large">Large</option>
+      </select>
+
+     
+      <label for="custom-bg-color">Background Color:</label>
+      <input type="color" id="custom-bg-color">
+
+      <label for="custom-text-color">Text Color:</label>
+      <input type="color" id="custom-text-color">
+
+     
+      <label for="notifications">Enable Notifications:</label>
+      <input type="checkbox" id="notifications" onchange="toggleNotifications()">
+
+      
+      <label for="reminder-interval">Reminder Interval (hours):</label>
+      <select id="reminder-interval">
+        <option value="12">12 Hours</option>
+        <option value="24" selected>24 Hours</option>
+        <option value="48">48 Hours</option>
+      </select>
+
+      
+      <label for="language">Language:</label>
+      <select id="language" onchange="changeLanguage()">
+        <option value="en">English</option>
+        <option value="es">Spanish</option>
+        <option value="fr">French</option>
+        <option value="de">German</option>
+      </select>
+
+
+      <label for="sound-alert">Enable Sound Alerts:</label>
+      <input type="checkbox" id="sound-alert" onchange="toggleSoundAlert()">
+
+   
+      <p id="last-saved-time"></p>
+
+    
+      <br><br>
+      <button onclick="saveSettings()">Save Settings</button>
+      <button onclick="resetSettings()" style="background-color: #dc3545;">Reset to Default</button>
+    </div>
+  </div>
+
+  
+  <audio id="alert-sound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+
+  
+  <div id="toast">You haven't saved money in the last 24 hours. Please save now!</div>
+
+  <script>
+   
+    function toggleSettings() {
+      const panel = document.getElementById('settings-panel');
+      if (panel.classList.contains('show')) {
+        panel.classList.remove('show');
+        setTimeout(() => (panel.style.display = 'none'), 300);
+      } else {
+        panel.style.display = 'block';
+        setTimeout(() => panel.classList.add('show'), 10);
+      }
+    }
+
+    
+    function previewTheme() {
+      const theme = document.getElementById('theme').value;
+      applyTheme(theme);
+    }
+
+    
+    function previewFontSize() {
+      const fontSize = document.getElementById('font-size').value;
+      applyFontSize(fontSize);
+    }
+
+   
+    function toggleNotifications() {
+      const notificationsEnabled = document.getElementById('notifications').checked;
+      if (notificationsEnabled) {
+        alert('Notifications are now enabled!');
+      }
+    }
+
+  
+    function toggleSoundAlert() {
+      const soundAlertEnabled = document.getElementById('sound-alert').checked;
+      localStorage.setItem('soundAlertEnabled', soundAlertEnabled);
+    }
+
+    
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 5000); 
+    }
+
+    
+    function saveSettings() {
+      const theme = document.getElementById('theme').value;
+      const fontSize = document.getElementById('font-size').value;
+      const notificationsEnabled = document.getElementById('notifications').checked;
+      const reminderInterval = document.getElementById('reminder-interval').value;
+      const customBgColor = document.getElementById('custom-bg-color').value;
+      const customTextColor = document.getElementById('custom-text-color').value;
+      const language = document.getElementById('language').value;
+      const soundAlertEnabled = document.getElementById('sound-alert').checked;
+
+      localStorage.setItem('theme', theme);
+      localStorage.setItem('fontSize', fontSize);
+      localStorage.setItem('notifications', notificationsEnabled);
+      localStorage.setItem('reminderInterval', reminderInterval);
+      localStorage.setItem('customBgColor', customBgColor);
+      localStorage.setItem('customTextColor', customTextColor);
+      localStorage.setItem('language', language);
+      localStorage.setItem('soundAlertEnabled', soundAlertEnabled);
+
+      const now = new Date().getTime();
+      localStorage.setItem('lastSavedMoney', now);
+
+      alert('Settings saved successfully!');
+      updateLastSavedTime();
+    }
+
+   
+    function resetSettings() {
+      localStorage.setItem('theme', 'light');
+      localStorage.setItem('fontSize', 'medium');
+      localStorage.setItem('notifications', 'false');
+      localStorage.setItem('reminderInterval', '24');
+      localStorage.setItem('customBgColor', '#ffffff');
+      localStorage.setItem('customTextColor', '#000000');
+      localStorage.setItem('language', 'en');
+      localStorage.setItem('soundAlertEnabled', 'false');
+
+      applyTheme('light');
+      applyFontSize('medium');
+      document.getElementById('notifications').checked = false;
+      document.getElementById('reminder-interval').value = '24';
+      document.getElementById('language').value = 'en';
+      document.getElementById('sound-alert').checked = false;
+
+      alert('Settings reset to default.');
+    }
+
+   
+    function applyTheme(theme) {
+      const customBgColor = localStorage.getItem('customBgColor');
+      const customTextColor = localStorage.getItem('customTextColor');
+
+      if (theme === 'custom' && customBgColor && customTextColor) {
+        document.body.style.backgroundColor = customBgColor;
+        document.body.style.color = customTextColor;
+      } else if (theme === 'light') {
+        document.body.style.backgroundColor = '#ffffff';
+        document.body.style.color = '#000000';
+      } else if (theme === 'dark') {
+        document.body.style.backgroundColor = '#000000';
+        document.body.style.color = '#ffffff';
+      } else if (theme === 'blue') {
+        document.body.style.backgroundColor = '#e0f7fa';
+        document.body.style.color = '#004d40';
+      }
+    }
+
+   
+    function applyFontSize(fontSize) {
+      if (fontSize === 'small') {
+        document.body.style.fontSize = '12px';
+      } else if (fontSize === 'medium') {
+        document.body.style.fontSize = '16px';
+      } else if (fontSize === 'large') {
+        document.body.style.fontSize = '20px';
+      }
+    }
+
+   
+    function changeLanguage() {
+      const language = document.getElementById('language').value;
+      localStorage.setItem('language', language);
+      alert('Language changed to ' + language);
+    }
+
+    
+    function updateLastSavedTime() {
+      const lastSavedTime = new Date(localStorage.getItem('lastSavedMoney'));
+      document.getElementById('last-saved-time').textContent = 'Last settings saved: ' + lastSavedTime.toLocaleString();
+    }
+
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      const theme = localStorage.getItem('theme') || 'light';
+      const fontSize = localStorage.getItem('fontSize') || 'medium';
+      const notificationsEnabled = localStorage.getItem('notifications') === 'true';
+      const reminderInterval = localStorage.getItem('reminderInterval') || '24';
+      const language = localStorage.getItem('language') || 'en';
+      const soundAlertEnabled = localStorage.getItem('soundAlertEnabled') === 'true';
+
+      applyTheme(theme);
+      applyFontSize(fontSize);
+
+      document.getElementById('theme').value = theme;
+      document.getElementById('font-size').value = fontSize;
+      document.getElementById('notifications').checked = notificationsEnabled;
+      document.getElementById('reminder-interval').value = reminderInterval;
+      document.getElementById('language').value = language;
+      document.getElementById('sound-alert').checked = soundAlertEnabled;
+
+      updateLastSavedTime();
+      checkLastSavedMoney();
+    });
+  </script>
+</body>
+</html>

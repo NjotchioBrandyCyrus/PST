@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact Us - Personal Saving Tracker</title>
+  <link rel="icon" type="image/x-icon" href=" image/contact.ico">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+
+  <!-- Navbar -->
+  <nav class="bg-blue-500 p-4">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <!-- Logo -->
+      <div class="text-white text-2xl font-bold">
+        Savings Tracker
+      </div>
+      <!-- Navigation Links -->
+      <div class="space-x-6">
+        <a href="/home" class="text-white hover:text-gray-300">Home</a>
+        <a href="/dashboard" class="text-white hover:text-gray-300">Dashboard</a>
+        <a href="/settings" class="text-white hover:text-gray-300">Settings</a>
+        <a href="/about" class="text-white hover:text-gray-300">About</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <div class="content p-8">
+    <section class="section max-w-4xl mx-auto bg-white p-6 rounded-md shadow-md">
+      <h2 class="text-center text-3xl text-blue-600">Contact Us</h2>
+      <p class="text-center text-gray-600 mt-2">Have questions or suggestions? Feel free to reach out!</p>
+      
+      <form class="contact-form mt-8 space-y-4" onsubmit="sendMessage(event)">
+        <input type="text" id="userName" placeholder="Your Name" class="w-full p-3 border border-gray-300 rounded-md" required>
+        <input type="email" id="userEmail" placeholder="Your Email" class="w-full p-3 border border-gray-300 rounded-md" required>
+        <textarea id="userMessage" placeholder="Your Message" rows="5" class="w-full p-3 border border-gray-300 rounded-md" required></textarea>
+        <button type="submit" class="w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600">Send Message</button>
+      </form>
+
+      <p class="text-center text-gray-600 mt-4">📧 Email: 
+        <a href="mailto:njotchiobrandycyrus@gmail.com" class="text-blue-500 hover:text-blue-700">
+          njotchiobrandycyrus@gmail.com
+        </a>
+      </p>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-blue-500 text-white text-center py-4 mt-8">
+    <p>© 2025 Personal Saving Tracker | Designed by Brandy Cyrus</p>
+  </footer>
+
+  <script>
+    function sendMessage(event) {
+      event.preventDefault(); // Prevent form submission
+
+      const name = document.getElementById('userName').value;
+      const email = document.getElementById('userEmail').value;
+      const message = document.getElementById('userMessage').value;
+
+      // Create a message to send to WhatsApp
+      const whatsappMessage = `*New Message from:* ${name} (${email})\n\n*Message:* ${message}`;
+
+      // WhatsApp link (replace with your WhatsApp link)
+      const whatsappLink = 'https://wa.me/237677135921'; // Replace with your WhatsApp link
+
+      // Format the WhatsApp URL
+      const whatsappUrl = `${whatsappLink}?text=${encodeURIComponent(whatsappMessage)}`;
+
+      // Open WhatsApp chat
+      window.open(whatsappUrl, '_blank');
+    }
+  </script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const theme = localStorage.getItem('theme') || 'light';
+      const fontSize = localStorage.getItem('fontSize') || 'medium';
+  
+      applyTheme(theme);
+      applyFontSize(fontSize);
+    });
+  
+    function applyTheme(theme) {
+      const customBgColor = localStorage.getItem('customBgColor');
+      const customTextColor = localStorage.getItem('customTextColor');
+  
+      if (theme === 'custom' && customBgColor && customTextColor) {
+        document.body.style.backgroundColor = customBgColor;
+        document.body.style.color = customTextColor;
+      } else if (theme === 'light') {
+        document.body.style.backgroundColor = '#ffffff';
+        document.body.style.color = '#000000';
+      } else if (theme === 'dark') {
+        document.body.style.backgroundColor = '#000000';
+        document.body.style.color = '#ffffff';
+      } else if (theme === 'blue') {
+        document.body.style.backgroundColor = '#e0f7fa';
+        document.body.style.color = '#004d40';
+      }
+    }
+  
+    function applyFontSize(fontSize) {
+      if (fontSize === 'small') {
+        document.body.style.fontSize = '12px';
+      } else if (fontSize === 'medium') {
+        document.body.style.fontSize = '16px';
+      } else if (fontSize === 'large') {
+        document.body.style.fontSize = '20px';
+      }
+    }
+  </script>
+  
+</body>
+</html>
