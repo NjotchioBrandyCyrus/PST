@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - Savings Goal Tracker</title>
-  <link rel="icon" type="image/x-icon" href="image/fev.ico">
+  <link rel="icon" type="image/x-icon" href="/static/image/fev.ico">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
@@ -25,25 +25,25 @@
     </nav>
   </aside>
 
-  <!-- Main Content -->
+  
   <main class="ml-64 flex-1 p-6">
     <header class="bg-blue-800 text-white p-4 text-center text-2xl font-semibold rounded shadow-lg">
       WELCOME TO THE EXPENSE TRACKER APP
     </header>
   </main>
 
-  <!-- JavaScript for Logout -->
+  
   <script>
-    // Add event listener to the logout link
+    
     document.getElementById('logout').addEventListener('click', function(event) {
-      event.preventDefault();  // Prevent the default link behavior
+      event.preventDefault(); 
 
-      // Clear session data (cookies, sessionStorage, localStorage)
-      localStorage.removeItem('userSession');  // Remove session info from localStorage
-      sessionStorage.removeItem('userSession');  // If you're using sessionStorage
+      
+      localStorage.removeItem('userSession');  
+      sessionStorage.removeItem('userSession');  
 
-      // Redirect to the login page after logout
-      window.location.href = 'signin.html';  // Replace 'login.html' with your actual login page
+      
+      window.location.href = 'signin.html';  
     });
   </script>
 </body>

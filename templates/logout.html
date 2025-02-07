@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - Savings Goal Tracker</title>
-  <link rel="icon" type="image/x-icon" href="image/fev.ico">
+  <link rel="icon" type="image/x-icon" href="/static/image/fev.ico">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
 </head>
 <body class="flex bg-gray-100 h-screen">
 
-  <!-- Sidebar -->
+
   <aside class="w-64 bg-blue-800 text-white flex flex-col fixed h-full p-5 transition-all">
     <h2 class="text-2xl font-bold mb-6">Tracker Menu</h2>
     <nav class="space-y-4">
@@ -22,32 +22,32 @@
       <a href="/settings" class="flex items-center p-3 hover:bg-blue-600 rounded"><i class="bx bx-cog mr-3"></i> Settings</a>
       <a href="/about" class="flex items-center p-3 hover:bg-blue-600 rounded"><i class="bx bx-info-circle mr-3"></i> About</a>
       <a href="/contact" class="flex items-center p-3 hover:bg-blue-600 rounded"><i class="bx bx-phone mr-3"></i> Contact</a>
-      <!-- Updated Logout button -->
+      
       <a href="javascript:void(0);" class="flex items-center p-3 hover:bg-blue-600 rounded" onclick="logout()">
         <i class="bx bx-log-in-circle mr-3"></i> Logout
       </a>
     </nav>
   </aside>
 
-  <!-- Main Content -->
+  
   <main class="ml-64 flex-1 p-6">
-    <!-- Content goes here -->
+    
   </main>
 
   <script>
-    // Function to handle logout
+    
     function logout() {
-      // Confirm logout action
+      
       const isConfirmed = confirm('Are you sure you want to log out?');
       
       if (isConfirmed) {
-        // Clear any authentication-related data (e.g., token, user info)
-        localStorage.removeItem('authToken'); // Example token removal
-        sessionStorage.removeItem('authToken'); // Example session token removal
         
-        // Redirect to login page (or logout confirmation page)
-        window.location.href = 'login.html'; // Replace with your actual login page URL
-      }
+        localStorage.removeItem('authToken'); 
+        sessionStorage.removeItem('authToken'); 
+        
+        
+        window.location.href = 'login.html'; 
+      
     }
   </script>
 

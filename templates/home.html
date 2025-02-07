@@ -4,36 +4,37 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Personal Saving Tracker</title>
-  <link rel="icon" type="image/x-icon" href="image/fevi.ico">
+  <link rel="icon" type="image/x-icon" href="/static/image/fevi.ico">
   <script src="https://cdn.tailwindcss.com"></script>
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const theme = localStorage.getItem('theme') || 'light';
       const fontSize = localStorage.getItem('fontSize') || 'medium';
-  
+
       applyTheme(theme);
       applyFontSize(fontSize);
     });
-  
+
     function applyTheme(theme) {
       const customBgColor = localStorage.getItem('customBgColor');
       const customTextColor = localStorage.getItem('customTextColor');
-  
+
       if (theme === 'custom' && customBgColor && customTextColor) {
         document.body.style.backgroundColor = customBgColor;
         document.body.style.color = customTextColor;
       } else if (theme === 'light') {
-        document.body.style.backgroundColor = '#ffffff';
+        document.body.style.backgroundColor = 'transparent';
         document.body.style.color = '#000000';
       } else if (theme === 'dark') {
-        document.body.style.backgroundColor = '#000000';
+        document.body.style.backgroundColor = 'transparent';
         document.body.style.color = '#ffffff';
       } else if (theme === 'blue') {
-        document.body.style.backgroundColor = '#e0f7fa';
+        document.body.style.backgroundColor = 'transparent';
         document.body.style.color = '#004d40';
       }
     }
-  
+
     function applyFontSize(fontSize) {
       if (fontSize === 'small') {
         document.body.style.fontSize = '12px';
@@ -44,17 +45,46 @@
       }
     }
   </script>
-  
+
   <style>
-    body {
-      background-color: whitesmoke;
-      font-family: Arial, sans-serif;
+    html, body {
+      height: 100%;
       margin: 0;
       padding: 0;
+      display: flex;
+      flex-direction: column;
+      font-family: Arial, sans-serif;
     }
-    /* Navigation Bar with Transition Effects */
+
+    
+    body {
+      background: url('/static/saving.jpeg') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: inherit;
+      filter: blur(4px); 
+      z-index: -1; 
+    }
+
+  
+    .wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    
     .navbar {
-      background-color: #00698f;
+      background-color: rgba(0, 105, 143, 0.8);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -66,6 +96,7 @@
       z-index: 1000;
       transition: background-color 0.3s ease, transform 0.3s ease;
     }
+
     .navbar a {
       color: white;
       text-decoration: none;
@@ -73,99 +104,137 @@
       padding: 10px 15px;
       transition: background 0.3s ease, transform 0.3s ease;
     }
+
     .navbar a:hover {
       background-color: #004d66;
       border-radius: 5px;
       transform: scale(1.05);
     }
+
     .nav-links {
       display: flex;
       gap: 20px;
     }
+
     .logo {
       font-size: 22px;
       font-weight: bold;
       color: white;
     }
-    /* Adjust body padding to prevent content overlap with the fixed nav bar */
-    .content {
-      padding-top: 80px;
+
+    .welcome-text {
+      color: white;
+      text-align: center;
+      font-size: 20px;
+      flex: 1;
     }
+
+    
+    .content {
+      flex: 1;
+      padding-top: 120px; 
+    }
+
+    
     header {
-      background-color: #00698f;
+      background-color: rgba(0, 105, 143, 0.6);
       padding: 40px;
       text-align: center;
-      font-size: 35px;
+      font-size: 95px;
       color: white;
       border-radius: 10px 10px 0 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px; 
     }
+
     header h1 {
       margin: 0;
     }
+
+    
     .center-text {
       text-align: center;
+      color: white;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      border-radius: 10px;
     }
+
     section {
-      padding: 40px 20px;
+      padding:none;
     }
+
+    
+    .features-list {
+      font-size: 20px;
+      color: white;
+     
+      padding: 20px;
+      border-radius: 10px;
+      position: relative;
+      left: 20px;
+      width: 50%;
+      margin-top: 50px; 
+      margin-bottom: 70px; 
+    }
+
+    .features-list p {
+      margin: 10px 0;
+    }
+
+    
     footer {
-      background-color: #777;
+      background-color: rgba(119, 119, 119, 0.8);
       padding: 20px;
       text-align: center;
       color: white;
-      margin-top: 20px;
+      width: 100%;
+      position: relative;
+      bottom: 0;
     }
-    /* Custom Styles */
+
+    
     .highlight {
-      color: rgb(26, 145, 250);
+      color: #f1c40f;
       font-size: large;
-    }
-    .features-list {
-      font-size: 20px;
-      text-align: center;
-      margin-top: 30px;
-    }
-    .features-list p {
-      margin: 10px 0;
     }
   </style>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="logo">Savings Tracker</div>
-    <div class="nav-links">
-     
-      <a href="dashboard">Dashboard</a>
-     
+  <div class="wrapper">
+    <nav class="navbar">
+      <div class="logo">Savings Tracker</div>
+      <div class="welcome-text">
+        <h1><b>WELCOME TO YOUR HOME PAGE</b></h1>
+        <p style="color: aqua;">Welcome to your personal savings tracker! Start setting your savings goals today.</p>
+      </div>
+      <div class="nav-links">
+        <a href="dashboard">Dashboard</a>
+      </div>
+    </nav>
+
+    <div class="content">
+      <header>
+        <h1>PERSONAL SAVING TRACKER</h1>
+      </header>
+
+      <section>
+        <article class="features-list">
+          <h1 style="font-size: xx-large;"><b>By using a Personal Saving Tracker, you will be able to:</b></h1>
+          <p><b>✅ Identify areas for improvement in your saving habits</b></p>
+          <p><b>✅ Make adjustments to optimize your savings strategy</b></p>
+          <p><b>✅ Stay motivated and focused on your goals</b></p>
+          <p><b>✅ Celebrate your progress and achievements!</b></p>
+        </article>
+      </section>
     </div>
-  </nav>
 
-  <div class="content">
-    <header>
-      <h1>PERSONAL SAVING TRACKER</h1>
-    </header>
-
-    <div class="center-text">
-      <h1>WELCOME TO YOUR HOME PAGE</h1>
-      <p class="highlight">
-        Welcome to your personal savings tracker! Start setting your savings goals today.
-      </p>
-    </div>
-
-    <section>
-      <article class="features-list">
-        
-        <h1 style="font-size: xx-large;">By using a Personal Saving Tracker, you will be able to:</h1>
-        <p>✅ Identify areas for improvement in your saving habits</p>
-        <p>✅ Make adjustments to optimize your savings strategy</p>
-        <p>✅ Stay motivated and focused on your goals</p>
-        <p>✅ Celebrate your progress and achievements!</p>
-      </article>
-    </section>
+    
+    <footer>
+      <p>© 2025 Personal Saving Tracker | Designed by Njotchio Brandy Cyrus</p>
+    </footer>
   </div>
-
-  <footer>
-    <p>© 2025 Personal Saving Tracker | Designed by Njotchio Brandy Cyrus</p>
-  </footer>
 </body>
 </html>

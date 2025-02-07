@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Analytics - Savings Goal Tracker</title>
-  <link rel="icon" type="image/x-icon" href="image/analytic.ico">
+  <link rel="icon" type="image/x-icon" href="/static/image/analytic.ico">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
@@ -101,39 +101,39 @@
           </tr>
         </thead>
         <tbody id="goal-table-body">
-          <!-- Goal rows will appear here -->
+          
         </tbody>
       </table>
     </div>
   </div>
 
   <script>
-    // Initialize empty goal data
+    
     let goals = [];
 
     const ctx = document.getElementById('analyticsChart').getContext('2d');
     const analyticsChart = new Chart(ctx, {
-      type: 'bar',  // Change the chart type to 'bar' for target/saved/remaining
+      type: 'bar',  
       data: {
-        labels: [], // This will hold the goal names
+        labels: [], 
         datasets: [
           {
             label: 'Target Amount',
-            data: [], // This will hold the target amounts
+            data: [], 
             borderColor: '#FF6347',
             backgroundColor: 'rgba(255, 99, 132, 0.2)',
             borderWidth: 1
           },
           {
             label: 'Amount Saved',
-            data: [], // This will hold the saved amounts
+            data: [], 
             borderColor: '#4CAF50',
             backgroundColor: 'rgba(76, 175, 80, 0.2)',
             borderWidth: 1
           },
           {
             label: 'Remaining',
-            data: [], // This will hold the remaining amounts
+            data: [], 
             borderColor: '#00BCD4',
             backgroundColor: 'rgba(0, 188, 212, 0.2)',
             borderWidth: 1
@@ -162,10 +162,10 @@
         };
         goals.push(goal);
 
-        // Update the analytics chart when a goal is added
+        
         updateAnalyticsChart();
 
-        // Add goal to the goal select dropdown
+      
         const goalSelect = document.getElementById('goal-select');
         const option = document.createElement('option');
         option.textContent = goalDescription;
@@ -173,7 +173,7 @@
 
         updateGoalTable();
 
-        // Clear input fields
+        
         document.getElementById('goal').value = '';
         document.getElementById('target').value = '';
       } else {
@@ -190,7 +190,7 @@
         const goal = goals.find(g => g.description === selectedGoalDescription);
         goal.amountSaved += progressAmount;
 
-        // Update the analytics chart when progress is updated
+        
         updateAnalyticsChart();
 
         updateGoalTable();
@@ -200,7 +200,7 @@
     }
 
     function updateAnalyticsChart() {
-      // Clear existing chart data
+      
       analyticsChart.data.labels = [];
       analyticsChart.data.datasets[0].data = [];
       analyticsChart.data.datasets[1].data = [];
@@ -247,7 +247,7 @@
         goal.description = newDescription;
         goal.targetAmount = newTargetAmount;
 
-        // Update the analytics chart when a goal is updated
+        
         updateAnalyticsChart();
 
         updateGoalTable();

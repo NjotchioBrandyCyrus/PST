@@ -7,7 +7,7 @@
  
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
-  <link rel="icon" type="image/x-icon" href="image/MS_Project_Logo.ico">
+  <link rel="icon" type="image/x-icon" href="/static/image/MS_Project_Logo.ico">
   <style>
     body {
       background-color: whitesmoke;
@@ -42,7 +42,7 @@
       max-width: 800px;
       margin: 0 auto;
     }
-    /* Project Form Styling */
+    
     .project-form {
       background-color: white;
       padding: 20px;
@@ -77,7 +77,7 @@
     .project-form button:hover {
       background-color: #45a049;
     }
-    /* Project Card Styling */
+    
     .project-card {
       background-color: white;
       padding: 20px;
@@ -100,12 +100,12 @@
 <body>
   <header>
     <div>Projects</div>
-    <!-- Dashboard button to navigate back -->
+    
     <a href="/dashboard" class="nav-btn">Dashboard</a>
   </header>
   
   <div class="container">
-    <!-- Project Form --> 
+
     <div class="project-form">
       <h2>Add New Project</h2>
       <input type="text" id="project-name" placeholder="Project Name">
@@ -113,20 +113,20 @@
       <button onclick="saveProject()">Save Project</button>
     </div>
     
-    <!-- Projects Display --> 
+    
     <div id="project-container">
-      <!-- Project cards will be dynamically inserted here --> 
+    
     </div>
   </div>
   
   <script>
-    // Retrieve projects from localStorage or return an empty array if none exist.
+    
     function getProjects() {
       const projects = localStorage.getItem('projects');
       return projects ? JSON.parse(projects) : [];
     }
 
-    // Save a new project and update the list.
+  
     function saveProject() {
       const name = document.getElementById('project-name').value.trim();
       const description = document.getElementById('project-desc').value.trim();
@@ -140,18 +140,18 @@
       projects.push({ name, description });
       localStorage.setItem('projects', JSON.stringify(projects));
       
-      // Clear form fields.
+      
       document.getElementById('project-name').value = '';
       document.getElementById('project-desc').value = '';
       
       renderProjects();
     }
 
-    // Render project cards in the container.
+    
     function renderProjects() {
       const projects = getProjects();
       const container = document.getElementById('project-container');
-      container.innerHTML = ''; // Clear existing content
+      container.innerHTML = ''; 
       
       projects.forEach(project => {
         const card = document.createElement('div');
@@ -161,7 +161,6 @@
       });
     }
 
-    // Render projects on page load.
     document.addEventListener('DOMContentLoaded', renderProjects);
   </script>
   <script>
