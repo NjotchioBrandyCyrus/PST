@@ -11,43 +11,20 @@
 </head>
 <body class="flex bg-gray-100 h-screen">
 
-
-  <aside class="w-64 bg-blue-800 text-white flex flex-col fixed h-full p-5 transition-all">
-    <h2 class="text-2xl font-bold mb-6">Tracker Menu</h2>
-    <nav class="space-y-4">
-      <a href="/home" class="flex items-center p-3 hover:bg-blue-600 rounded"><i class="bx bx-home mr-3"></i> Home</a>
-      <a href="/projects" class="flex items-center p-3 hover:bg-blue-600 rounded"><i class="bx bx-briefcase mr-3"></i> Projects</a>
-      <a href="/payments" class="flex items-center p-3 hover:bg-blue-600 rounded"><i class="bx bx-credit-card mr-3"></i> Payments</a>
-      <a href="/analytics" class="flex items-center p-3 hover:bg-blue-600 rounded"><i class="bx bx-bar-chart mr-3"></i> Analytics</a>
-      <a href="/settings" class="flex items-center p-3 hover:bg-blue-600 rounded"><i class="bx bx-cog mr-3"></i> Settings</a>
-      <a href="/about" class="flex items-center p-3 hover:bg-blue-600 rounded"><i class="bx bx-info-circle mr-3"></i> About</a>
-      <a href="/contact" class="flex items-center p-3 hover:bg-blue-600 rounded"><i class="bx bx-phone mr-3"></i> Contact</a>
-      
-      <a href="javascript:void(0);" class="flex items-center p-3 hover:bg-blue-600 rounded" onclick="logout()">
-        <i class="bx bx-log-in-circle mr-3"></i> Logout
-      </a>
-    </nav>
-  </aside>
-
-  
   <main class="ml-64 flex-1 p-6">
-    
+    <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-md">
+      Logout
+    </button>
   </main>
 
   <script>
-    
     function logout() {
-      
       const isConfirmed = confirm('Are you sure you want to log out?');
-      
       if (isConfirmed) {
-        
         localStorage.removeItem('authToken'); 
         sessionStorage.removeItem('authToken'); 
-        
-        
-        window.location.href = 'login.html'; 
-      
+        window.location.href = '/signin';  
+      }
     }
   </script>
 

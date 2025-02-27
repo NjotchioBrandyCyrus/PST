@@ -1,7 +1,5 @@
-# create_db.py
-from database import engine
-from models import Base  # Import only Base
+from models import User, Savings, Transactions  # Import all models explicitly
+from database import engine, Base
 
-# Create all tables in the database
 Base.metadata.create_all(bind=engine)
 print("Database tables created successfully!")

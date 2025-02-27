@@ -8,42 +8,330 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    .transition-all { transition: all 0.3s ease-in-out; }
+    .hidden { display: none; }
+
+    /* Slideshow Container */
+    .slideshow-container {
+      position: relative;
+      max-width: 800px;
+      margin: auto;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgb(3, 1, 112);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 250px;
+      height: 100%;
+      background-color: #1e40af;
+      color: white;
+      padding: 20px;
+      transition: 0.3s;
+    }
+    .sidebar .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .sidebar .menu a {
+      padding: 10px;
+      text-decoration: none;
+      color: white;
+      font-size: 18px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .sidebar .menu a:hover {
+      background-color: #2563eb;
+      transform: scale(1.05);
+    }
+    .sidebar .logout-btn {
+      background-color: #dc2626;
+      padding: 10px;
+      color: white;
+      text-align: center;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .sidebar .logout-btn:hover {
+      background-color: #9b1c1c;
+      transform: scale(1.05);
+    }
+
+    /* Main Content */
+    .main-content {
+      margin-left: 250px;
+      padding: 20px;
+      transition: margin-left 0.3s ease-in-out;
+    }
+
+    /* Slide */
+    .slide {
+      display: none;
+      animation: fadeIn 1s ease-in-out;
+    }
+    .active-slide { display: block; }
+
+    /* Navigation Buttons */
+    .prev, .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .prev { left: 10px; }
+    .next { right: 10px; }
+    .prev:hover, .next:hover { background-color: rgba(0, 0, 0, 0.9); transform: scale(1.1); }
+
+    /* Dots */
+    .dots {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .dot {
+      height: 10px;
+      width: 10px;
+      margin: 0 5px;
+      background-color: rgb(21, 6, 236);
+      border-radius: 50%;
+      display: inline-block;
+      cursor: pointer;
+    }
+    .active-dot { background-color: #000407; }
+
+    /* Fade Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 2; }
+    }
+
+    /* Section Animations */
+    .fade-in { animation: fadeIn 1s ease-in-out; }
+    .slide-up { animation: slideUp 1s ease-in-out; }
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* New animation for tip cards */
+    .tip-card:hover {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      transform: translateY(-10px);
+    }
+  </style>
 </head>
-<body class="flex bg-gray-100 min-h-screen">
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
   <!-- Sidebar -->
-  <aside class="w-64 bg-blue-900 text-white flex flex-col fixed h-full p-6 transition-all shadow-lg">
+  <aside class="sidebar">
     <h2 class="text-2xl font-bold mb-6 text-center">Tracker Menu</h2>
     <nav class="space-y-4">
-      <a href="/home" class="flex items-center p-3 hover:bg-blue-700 rounded transition"><i class="bx bx-home mr-3"></i> Home</a>
-      <a href="/projects" class="flex items-center p-3 hover:bg-blue-700 rounded transition"><i class="bx bx-briefcase mr-3"></i> Projects</a>
-      <a href="/payments" class="flex items-center p-3 hover:bg-blue-700 rounded transition"><i class="bx bx-credit-card mr-3"></i> Payments</a>
-      <a href="/analytics" class="flex items-center p-3 hover:bg-blue-700 rounded transition"><i class="bx bx-bar-chart mr-3"></i> Analytics</a>
-      <a href="/settings" class="flex items-center p-3 hover:bg-blue-700 rounded transition"><i class="bx bx-cog mr-3"></i> Settings</a>
-      <a href="/about" class="flex items-center p-3 hover:bg-blue-700 rounded transition"><i class="bx bx-info-circle mr-3"></i> About</a>
-      <a href="/contact" class="flex items-center p-3 hover:bg-blue-700 rounded transition"><i class="bx bx-phone mr-3"></i> Contact</a>
-      <a href="/#" id="logout" class="flex items-center p-3 hover:bg-red-700 rounded transition"><i class="bx bx-log-in-circle mr-3"></i> Logout</a>
+      <a href="/home" class="menu-item flex items-center p-3 hover:bg-blue-700 rounded transition"><i class="bx bx-home mr-3"></i> Home</a>
+      <a href="/projects" class="menu-item flex items-center p-3 hover:bg-blue-700 rounded transition"><i class="bx bx-briefcase mr-3"></i> Projects</a>
+      <a href="/payments" class="menu-item flex items-center p-3 hover:bg-blue-700 rounded transition"><i class="bx bx-credit-card mr-3"></i> Payments</a>
+      <a href="/analytics" class="menu-item flex items-center p-3 hover:bg-blue-700 rounded transition"><i class="bx bx-bar-chart mr-3"></i> Analytics</a>
+      <a href="/settings" class="menu-item flex items-center p-3 hover:bg-blue-700 rounded transition"><i class="bx bx-cog mr-3"></i> Settings</a>
+      <a href="/about" class="menu-item flex items-center p-3 hover:bg-blue-700 rounded transition"><i class="bx bx-info-circle mr-3"></i> About</a>
+      <a href="/contact" class="menu-item flex items-center p-3 hover:bg-blue-700 rounded transition"><i class="bx bx-phone mr-3"></i> Contact</a>
+      <button onclick="window.location.href='/logout'" class="w-full bg-red-500 text-white p-2 hover:bg-red-700 rounded-md mt-4">Logout</button>
     </nav>
+
   </aside>
 
-  
-  <main class="ml-64 flex-1 p-6">
-    <header class="bg-blue-800 text-white p-4 text-center text-2xl font-semibold rounded shadow-lg">
+  <!-- Main Content -->
+  <main class="main-content">
+    <header class="bg-blue-800 text-white p-4 text-2xl font-semibold rounded shadow-lg">
       WELCOME TO THE EXPENSE TRACKER APP
     </header>
+
+    <!-- Slideshow -->
+    <div class="slideshow-container mt-6">
+     
+
+      <!-- Slide 1 - Image with Caption -->
+      <div class="slide active-slide">
+        <div class="relative">
+          <img src="/static/image/e-paymen" alt="Saving Tip 1" width="100%" class="fade-in rounded-lg shadow-lg">
+          <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent text-white">
+            <h3 class="text-2xl font-bold">💡 Start Small, Think Big</h3>
+            <p class="text-lg mt-2">Begin with small daily savings and see your wealth grow!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 2 - Image with Caption -->
+      <div class="slide">
+        <div class="relative">
+          <img src="/static/images/savings" alt="Saving Tip 2" width="100%" class="fade-in rounded-lg shadow-lg">
+          <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent text-white">
+            <h3 class="text-2xl font-bold">🎯 Set Realistic Goals</h3>
+            <p class="text-lg mt-2">Set achievable milestones and track your progress regularly!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 3 - Image with Caption -->
+      <div class="slide">
+        <div class="relative">
+          <img src="/static/images/savings3" alt="Saving Tip 3" width="100%" class="fade-in rounded-lg shadow-lg">
+          <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent text-white">
+            <h3 class="text-2xl font-bold">📊 Track and Adjust</h3>
+            <p class="text-lg mt-2">Regularly review your savings and adjust for better results!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 4 - Image with Caption -->
+      <div class="slide">
+        <div class="relative">
+          <img src="/static/images/savings4" alt="Saving Tip 4" width="100%" class="fade-in rounded-lg shadow-lg">
+          <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent text-white">
+            <h3 class="text-2xl font-bold">💪 Stay Consistent</h3>
+            <p class="text-lg mt-2">Consistency is key! Keep saving and watch your goals materialize.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 5 - Image -->
+      <div class="slide">
+        <img src="/static/images/savings_goa" alt="Savings Goal" width="100%" class="fade-in">
+      </div>
+      
+      <!-- Slide 6 - Tips -->
+      <div class="slide p-6 bg-white shadow-lg rounded">
+        <h3 class="text-2xl font-bold">💡 Saving Tip:</h3>
+        <p class="text-gray-700 mt-2">Start with small daily savings and watch your finances grow! 🌱</p>
+      </div>
+      
+      <!-- Slide Navigation -->
+      <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
+      <button class="next" onclick="changeSlide(1)">&#10095;</button>
+    </div>
+
+    <!-- Dots -->
+    <div class="dots mt-4">
+      <span class="dot active-dot" onclick="setSlide(0)"></span>
+      <span class="dot" onclick="setSlide(1)"></span>
+      <span class="dot" onclick="setSlide(2)"></span>
+      <span class="dot" onclick="setSlide(3)"></span>
+    </div>
+
+    <!-- Additional Sections for Saving Tracker -->
+    <section class="mt-10 w-full max-w-4xl fade-in">
+      <h2 class="text-3xl font-semibold text-blue-800 mb-4">💰 How to Achieve Your Savings Goals</h2>
+      <p class="text-gray-600 text-lg">Setting clear financial goals is the first step toward success. Here are a few tips:</p>
+      <ul class="list-disc list-inside mt-4 text-gray-700 text-lg">
+        <li>Track your expenses to identify where you can save.</li>
+        <li>Start by saving small amounts daily or weekly.</li>
+        <li>Set realistic, achievable milestones and celebrate progress!</li>
+        <li>Review your goals regularly to stay on track.</li>
+      </ul>
+    </section>
+
+    <!-- Interactive Saving Strategy -->
+    <section class="mt-10 w-full max-w-4xl fade-in">
+      <h2 class="text-3xl font-semibold text-green-800 mb-6">🚀 Tips to Boost Your Savings Strategy</h2>
+      <p class="text-gray-700 text-lg mb-6">Building a sustainable savings plan takes time and effort. Here's how you can kick-start your financial journey:</p>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="tip-card bg-blue-100 p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300">
+          <h3 class="text-xl font-bold text-blue-900">💡 Automate Your Savings</h3>
+          <p class="text-gray-600 mt-2">Set up automatic transfers to your savings account every month. This helps you save without thinking about it!</p>
+        </div>
+        
+        <div class="tip-card bg-yellow-100 p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300">
+          <h3 class="text-xl font-bold text-yellow-900">📈 Use Budgeting Apps</h3>
+          <p class="text-gray-600 mt-2">Track your spending and find areas where you can cut back. Apps like Mint or YNAB can be a great help!</p>
+        </div>
+        
+        <div class="tip-card bg-green-100 p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300">
+          <h3 class="text-xl font-bold text-green-900">🎯 Set Short-Term & Long-Term Goals</h3>
+          <p class="text-gray-600 mt-2">Balance your immediate needs with long-term savings goals. Short-term goals help keep you motivated!</p>
+        </div>
+        
+        <div class="tip-card bg-purple-100 p-6 rounded-lg shadow-lg hover:shadow-xl transition duration-300">
+          <h3 class="text-xl font-bold text-purple-900">📊 Review Your Progress Monthly</h3>
+          <p class="text-gray-600 mt-2">Check in with your savings every month. Track your progress and adjust your strategy if needed!</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-12 w-full max-w-4xl slide-up">
+      
+    </section>
+
+    <!-- Savings Goal Calculator -->
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full fade-in">
+      <h2 class="text-3xl font-semibold text-blue-800 mb-6">💸 Savings Goal Calculator</h2>
+      <form id="goalForm">
+        <label for="goalAmount" class="block text-lg font-medium text-gray-700 mb-2">Total Savings Goal ($)</label>
+        <input type="number" id="goalAmount" name="goalAmount" placeholder="Enter your goal amount" class="border border-gray-300 p-2 rounded w-full mb-4" required>
+
+        <label for="currentAmount" class="block text-lg font-medium text-gray-700 mb-2">Current Savings ($)</label>
+        <input type="number" id="currentAmount" name="currentAmount" placeholder="Enter your current savings" class="border border-gray-300 p-2 rounded w-full mb-4" required>
+
+        <label for="timeFrame" class="block text-lg font-medium text-gray-700 mb-2">Timeframe (Months)</label>
+        <input type="number" id="timeFrame" name="timeFrame" placeholder="How many months to achieve your goal?" class="border border-gray-300 p-2 rounded w-full mb-4" required>
+
+        <button type="submit" class="bg-blue-800 text-white p-3 rounded hover:bg-blue-900 transition">Calculate</button>
+      </form>
+
+      <div id="savingsResult" class="mt-6 hidden">
+        <h3 class="text-2xl font-semibold text-green-700">Your Monthly Saving Target:</h3>
+        <p id="monthlySavings" class="text-xl text-green-600"></p>
+      </div>
+    </div>
   </main>
 
-  
   <script>
-    
-    document.getElementById('logout').addEventListener('click', function(event) {
-      event.preventDefault(); 
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
 
-      
-      localStorage.removeItem('userSession');  
-      sessionStorage.removeItem('userSession');  
+    function changeSlide(direction) {
+      currentSlide += direction;
+      if (currentSlide < 0) currentSlide = slides.length - 1;
+      if (currentSlide >= slides.length) currentSlide = 0;
+      updateSlide();
+    }
 
-      
-      window.location.href = 'signin.html';  
+    function setSlide(index) {
+      currentSlide = index;
+      updateSlide();
+    }
+
+    function updateSlide() {
+      slides.forEach((slide, index) => {
+        slide.classList.remove('active-slide');
+        dots[index].classList.remove('active-dot');
+        if (index === currentSlide) {
+          slide.classList.add('active-slide');
+          dots[index].classList.add('active-dot');
+        }
+      });
+    }
+
+    document.getElementById('goalForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const goalAmount = parseFloat(document.getElementById('goalAmount').value);
+      const currentAmount = parseFloat(document.getElementById('currentAmount').value);
+      const timeFrame = parseInt(document.getElementById('timeFrame').value);
+
+      const monthlyTarget = (goalAmount - currentAmount) / timeFrame;
+      document.getElementById('monthlySavings').textContent = `$${monthlyTarget.toFixed(2)}`;
+      document.getElementById('savingsResult').classList.remove('hidden');
     });
   </script>
 </body>

@@ -4,19 +4,21 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 from typing import List, Optional
+from fastapi.responses import HTMLResponse
 
 app = FastAPI()
-
+templates = Jinja2Templates(directory="templates") 
+# Home route
+@app.get("/")
+async def root(request: Request):
+    return templates.TemplateResponse("signin.html", {"request": request})
 # Set up template rendering
 templates = Jinja2Templates(directory="templates")
 
 # Serve static files (CSS, JS)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Home route
-@app.get("/")
-async def root(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})
+
 
 # Sign-in route
 @app.get("/signin")
@@ -24,8 +26,8 @@ async def signin(request: Request):
     return templates.TemplateResponse("signin.html", {"request": request})
 
 # Home route (another instance for when clicking "Go to Home")
-@app.get("/home")
-async def home(request: Request):
+@app.get("/home", response_class=HTMLResponse)
+def home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
 # Dashboard route
@@ -116,3 +118,8 @@ async def delete_goal(goal_id: int):
     global goals_db
     goals_db = [g for g in goals_db if g["id"] != goal_id]
     return {"message": "Goal deleted successfully"}
+
+# Read the custom 404 HTML file
+@app.exception_handler(404)
+async def custom_404_handler(request: Request, exc):
+    return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
